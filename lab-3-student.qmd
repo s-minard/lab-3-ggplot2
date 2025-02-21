@@ -1,3 +1,12 @@
+---
+title: "Lab 3: Exploring Rodents with `ggplot2`"
+author: Sam Minard
+date: today
+embed-resources: true
+code-tools: true
+echo: true
+output: html_document
+---
 # Part 1: Setup
 
 ## GitHub Workflow
@@ -39,7 +48,6 @@ In the code chunk below, load in the packages necessary for your analysis. You s
 
 ```{r}
 #| label: setup
-#| echo: false
 library(tidyverse)
 ```
 
@@ -109,7 +117,15 @@ Let's get started!
 
 ```{r}
 #| label: scatterplot
-
+ggplot(data = surveys, 
+       aes(x = weight,
+           y = hindfoot_length)) +
+  geom_point(alpha = 0.25) +
+  labs(x = "Weight (g)",
+       y = "",
+       subtitle = "Hind Foot Length",
+       title = "Hind Foot Length by Weight for Rodent Species") +
+  facet_wrap(~species)
 ```
 
 We can see there are **a lot** of points plotted on top of each other. Let's try and modify this plot to extract more information from it.
@@ -138,8 +154,15 @@ It takes a larger cognitive load to read text that is rotated. It is common prac
 
 ```{r}
 #| label: boxplot
-
-
+ggplot(data = surveys, 
+       aes(x = weight,
+           y = fct_reorder(species, weight))) +
+  geom_boxplot(outliers = FALSE) +
+  geom_jitter(color = "turquoise4", alpha = 0.1) +
+  labs(x = "Weight (g)",
+       y = "Species",
+       title = "Distributions of Weight for Rodent Species")
+               
 ```
 
 **9. Create side-by-side boxplots to visualize the distribution of weight within each species.**
@@ -180,7 +203,15 @@ Some people (and journals) prefer for boxplots to be stacked with a specific ori
 
 ```{r}
 #| label: rotated-boxplot
-
+ggplot(data = surveys, 
+       aes(x = fct_reorder(species, -weight),
+           y = weight)) +
+  geom_boxplot(outliers = FALSE) +
+  geom_jitter(color = "turquoise4", alpha = 0.1) +
+  labs(x = "Species",
+       y = "Weight (g)",
+       title = "Distributions of Weight for Rodent Species") +
+  theme(axis.text.x = element_text(angle = 45))
 ```
 
 Notice how vertically stacked boxplots make the species labels more readable than horizontally stacked boxplots (even when the axis labels are rotated). This is good practice!
