@@ -81,7 +81,7 @@ We are going to use the `read_csv()` function to load in the `surveys.csv` datas
 #| label: load-data
 
 surveys <- read_csv("data/surveys.csv")
-glimpse(surveys)
+#glimpse(surveys)
 ```
 
 **1. What are the dimensions (# of rows and columns) of these data?**
@@ -117,6 +117,8 @@ Let's get started!
 
 ```{r}
 #| label: scatterplot
+
+#Scatterplot
 ggplot(data = surveys, 
        aes(x = weight,
            y = hindfoot_length)) +
@@ -154,6 +156,8 @@ It takes a larger cognitive load to read text that is rotated. It is common prac
 
 ```{r}
 #| label: boxplot
+
+#Boxplot
 ggplot(data = surveys, 
        aes(x = weight,
            y = fct_reorder(species, weight))) +
@@ -203,6 +207,8 @@ Some people (and journals) prefer for boxplots to be stacked with a specific ori
 
 ```{r}
 #| label: rotated-boxplot
+
+#Boxplot 
 ggplot(data = surveys, 
        aes(x = fct_reorder(species, -weight),
            y = weight)) +
@@ -229,3 +235,46 @@ For Lab 3 you will submit the link to your GitHub repository. Your rendered file
 **If any of the options are not included, your Lab 3 or Challenge 3 assignment will receive an "Incomplete" and you will be required to submit a revision.**
 
 In addition, your document should not have any warnings or messages output in your HTML document. **If your HTML contains warnings or messages, you will receive an "Incomplete" for document formatting and you will be required to submit a revision.**
+
+# Challenge Problems
+
+## 5.1 Ridge Plot
+```{r}
+#| label: ridge-plot
+
+#install.packages("ggridges")
+library(ggridges)
+
+#Ridge plot
+ggplot(data = surveys) +
+  geom_density_ridges(aes(x = weight, 
+                          y = fct_reorder(species, -weight)), 
+                      fill = "purple4", 
+                      alpha = 0.5) +
+  labs(x = "Weight (g)",
+       y = "Species") +
+  theme_minimal()
+
+```
+
+## 5.2 Color Themes
+
+```{r}
+#| label: custom-color-ridges
+
+# Create color palette
+rainbow <- c("#54478c", "#405893", "#2c699a", "#048ba8", "#0db39e", "#16db93", "#83e377", "#b9e769", "#efea5a", "#F0D757", "#f1c453", "#f29e4c", "#CB895C", "#A3736C", "#685284")
+
+# Update ridge plot with colors
+ggplot(data = surveys) +
+  geom_density_ridges(aes(x = weight, 
+                          y = fct_reorder(species, -weight),
+                          fill = species), 
+                      alpha = 0.75) +
+  labs(x = "Weight (g)",
+       y = "Species") +
+  theme_minimal() +
+  scale_fill_manual(values = rainbow) +
+  guides(fill = FALSE)
+  
+```
